@@ -85,4 +85,26 @@ func (r *MyRedis) GetAllFromHash(ctx context.Context, hashname string) {
 	r.redisDb.HGetAll(ctx, hashname).Result()
 }
 
-func (r *MyRedis) AddToList() {}
+func (r *MyRedis) LeftPush(ctx context.Context, listname, value string) error {
+	return r.redisDb.LPush(ctx, listname, value).Err()
+}
+
+func (r *MyRedis) RightPush(ctx context.Context, listname, valu string) error {
+	return r.redisDb.RPush(ctx, listname, valu).Err()
+}
+
+func (r *MyRedis) PopRight(ctx context.Context, listname string) (string, error) {
+	return r.redisDb.RPop(ctx, listname).Result()
+}
+
+func (r *MyRedis) PopLeft(ctx context.Context, listname string) (string, error) {
+	return r.redisDb.LPop(ctx, listname).Result()
+}
+
+func (r *MyRedis) ListLength(ctx context.Context, listname string) (int64, error) {
+	return r.redisDb.LLen(ctx, listname).Result()
+}
+
+func (r *MyRedis) GetRangeElements(ctx context.Context, listname string, from, to int64) ([]string, error) {
+	return r.redisDb.LRange(ctx, listname, from, to).Result()
+}
