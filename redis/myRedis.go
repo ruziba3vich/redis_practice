@@ -81,8 +81,8 @@ func (r *MyRedis) ExistsInHash(ctx context.Context, hashname, key string) (bool,
 	return r.redisDb.HExists(ctx, hashname, key).Result()
 }
 
-func (r *MyRedis) GetAllFromHash(ctx context.Context, hashname string) {
-	r.redisDb.HGetAll(ctx, hashname).Result()
+func (r *MyRedis) GetAllFromHash(ctx context.Context, hashname string) (map[string]string, error) {
+	return r.redisDb.HGetAll(ctx, hashname).Result()
 }
 
 func (r *MyRedis) LeftPush(ctx context.Context, listname, value string) error {

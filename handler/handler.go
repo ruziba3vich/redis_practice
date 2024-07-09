@@ -6,16 +6,16 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/ruziba3vich/redis_practice/repo"
+	customRedis "github.com/ruziba3vich/redis_practice/redis"
 )
 
 type Handler struct {
-	customRedis repo.RedisClient
+	customRedis *customRedis.MyRedis
 }
 
-func New(customRedis *repo.RedisClient) *Handler {
+func New(customRedis *customRedis.MyRedis) *Handler {
 	return &Handler{
-		customRedis: *customRedis,
+		customRedis: customRedis,
 	}
 }
 
@@ -112,7 +112,7 @@ func (h *Handler) AddToHashHandler(c *gin.Context) {
 	hashname := c.Param("hashname")
 	key := c.Param("key")
 	value := c.Param("value")
-	expiration := 3600 // Example expiration time in seconds
+	expiration := 3600
 
 	err := h.customRedis.AddToHash(context.Background(), hashname, key, value, expiration)
 	if err != nil {
@@ -248,5 +248,3 @@ func (h *Handler) GetRangeElementsHandler(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"elements": result})
 }
-
-
